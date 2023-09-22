@@ -1,5 +1,6 @@
 const {Schema, model} = require('mongoose')
-
+const User = require('./User');
+const Comment = require('./Comment.js');
 const postSchema = new Schema({
     title:{
         type: String,
@@ -13,7 +14,7 @@ const postSchema = new Schema({
     },
     auth:{
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: User,
         requird: true,
     },
     thumbnail: {
@@ -26,12 +27,18 @@ const postSchema = new Schema({
         required: true
     },
     readTime: String,
-    likes: [Schema.Types.ObjectId],
-    dislikes: [Schema.Types.ObjectId],
+    likes: [{
+        type: Schema.Types.ObjectId,
+        ref: User,
+    }],
+    dislikes: [{
+        type: Schema.Types.ObjectId,
+        ref: User,
+    }],
     comments:[
         {
            type: Schema.Types.ObjectId,
-           ref: 'Comment' 
+           ref: Comment 
         }
     ],
 
