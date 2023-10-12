@@ -1,8 +1,6 @@
 require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
 const app = express();
 const PORT = process.env.PORT || 5000;
 const morgan = require('morgan');
@@ -19,12 +17,6 @@ const User = require('./model/User');
 //mongodb uri
 const MonngoDBUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.3nokuj1.mongodb.net/?retryWrites=true&w=majority`
 
-//session
-const store = new MongoDBStore({
-    uri: MonngoDBUrl,
-    collection: 'session',
-    // expiresAfterSeconds: 60 * 60 * 24 
-});
 
 //Middleware Array
 const middleware = [
@@ -32,11 +24,6 @@ const middleware = [
     express.urlencoded({extended: true}),
     express.json(),
     cors(),
-    session({
-        secret: process.env.DB_SECRET ||'SECRET_KEY',
-        resave: false,
-        store: store,
-    }),
     cookieParser(),
     bodyParser.json(),
 ]

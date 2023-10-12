@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator')
+const jwt = require('jsonwebtoken')
 const User = require("../model/User");
 const validationErrorFormatter = require('../utils/validationErrorFormatter');
 
@@ -20,13 +21,18 @@ exports.signupPostController = async (req, res, next) => {
            let createUser = await userModel.save();
            console.log(createUser);
            const user = {
+               _id: createUser._id,
                name,
-               email
+               email,
            }
-           req.session.user = user  
-           const cookie = req.session
-           console.log('User creste success fully');
-           res.json({ 'message': 'User creste success fully', cookie })
+           jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '30d' }, (err, tokan) =>{
+            console.log(tokan);
+            if(err){
+                res.json({"error": "Something was wrong"})
+                return
+            }
+            res.json({ 'message': 'User creste success fully', tokan, user })
+           })
        } catch (e) {
            console.log(e);
            next(e)
@@ -34,7 +40,6 @@ exports.signupPostController = async (req, res, next) => {
 }
 
 exports.loginPostController = async(req, res, next) =>{
-    console.log(req.body);
     let { email, password } = req.body;
     try{
         const userFind = await User.findOne({email})
@@ -45,15 +50,19 @@ exports.loginPostController = async(req, res, next) =>{
         if(!match){
             return res.json({ "message": "Invaild Credential" })
         }
-        const { name } = userFind
+        const { name,  _id} = userFind
         const user = {
+            _id,
             name,
             email
         }
-        req.session.user = user  
-        const cookie = req.session
-
-        res.json({user, cookie})
+        jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '30d' }, (err, tokan) => {
+            console.log(tokan);
+            if (err) {
+                return res.json({ "error": "Something was wrong" })
+            }
+            res.json({ tokan, user })
+        }) 
     }catch(e){
         console.log(e);
         next()

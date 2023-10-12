@@ -1,5 +1,4 @@
 const {Schema, model} = require('mongoose');
-const Post = require('./Post');
 const User = require('./User');
 const profileSchema = new Schema({
     user:{
@@ -17,7 +16,10 @@ const profileSchema = new Schema({
         trim: true,
         maxlangth: 500
     },
-    avater: String,
+    image: {
+        type: String,
+        default: 'https://i.ibb.co/FXJxQ80/images.png'
+    },
     links:{
         website: String,
         facebook: String,
@@ -27,13 +29,13 @@ const profileSchema = new Schema({
     post: [
         {
             type:Schema.Types.ObjectId,
-            ref:Post
+            ref:'Post'
         }
     ],
     bookmark:[
         {
             type: Schema.Types.ObjectId,
-            ref: Post
+            ref: 'Post'
         } 
     ]
 },{

@@ -18,6 +18,10 @@ const userSchema = new Schema({
     profile:{
         type: Schema.Types.ObjectId,
         ref: 'Profile'
+    },
+    image : {
+        type: String,
+        default: 'https://i.ibb.co/FXJxQ80/images.png'
     }
 },{
     timestamps: true
