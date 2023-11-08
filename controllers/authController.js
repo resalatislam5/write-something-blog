@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator')
 const jwt = require('jsonwebtoken')
 const User = require("../model/User");
 const validationErrorFormatter = require('../utils/validationErrorFormatter');
+const Profile = require('../model/Profile');
 
 exports.signupPostController = async (req, res, next) => {
     const result = validationResult(req).formatWith(validationErrorFormatter)
@@ -25,6 +26,10 @@ exports.signupPostController = async (req, res, next) => {
                name,
                email,
            }
+           const profile = new Profile({
+               user: createUser._id
+           })
+           await profile.save()
            jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '30d' }, (err, tokan) =>{
             console.log(tokan);
             if(err){

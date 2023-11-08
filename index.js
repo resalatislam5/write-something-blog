@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 const {authRoute: authRoutes} = require('./routes/authRoute');
 const { dashboardRoute } = require('./routes/dashboardRoute');
 const User = require('./model/User');
+const { postRoute } = require('./routes/postRoutes');
 
 
 //mongodb uri
@@ -31,6 +32,7 @@ app.use(middleware)
 
 app.use('/auth', authRoutes)
 app.use('/dashboard', dashboardRoute)
+app.use('/post', postRoute)
 
 app.get('/', (req, res) =>{
     res.send('Server is Running')
