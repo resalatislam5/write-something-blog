@@ -53,12 +53,16 @@ exports.editProfile = async (req, res) =>{
                     github: github || ''
                 }
             }
-            await Profile.findOneAndUpdate(
+            const createdProfile = await Profile.findOneAndUpdate(
                 {user: decoded._id},
                 { $set: profileInfo },
                 {new: true}
             )
             console.log('profileInfo', profileInfo);
+            await User.findOneAndUpdate(
+                { _id: decoded._id },
+                { $set: { profile: createdProfile._id, image: image, name: name } }
+            )
             res.json({ message: 'Profile Edit Successfully' })
             return
         }

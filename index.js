@@ -5,18 +5,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const morgan = require('morgan');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 // Imports Routes 
 const {authRoute: authRoutes} = require('./routes/authRoute');
 const { dashboardRoute } = require('./routes/dashboardRoute');
-const User = require('./model/User');
 const { postRoute } = require('./routes/postRoutes');
+const { HomeFetch } = require('./routes/homeFetch');
 
 
 //mongodb uri
-const MonngoDBUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.3nokuj1.mongodb.net/?retryWrites=true&w=majority`
+const MonngoDBUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@write-something.qgvdg1n.mongodb.net`
 
 
 //Middleware Array
@@ -26,13 +25,13 @@ const middleware = [
     express.json(),
     cors(),
     cookieParser(),
-    bodyParser.json(),
 ]
 app.use(middleware)
 
 app.use('/auth', authRoutes)
 app.use('/dashboard', dashboardRoute)
 app.use('/post', postRoute)
+app.use('/home', HomeFetch)
 
 app.get('/', (req, res) =>{
     res.send('Server is Running')

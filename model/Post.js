@@ -40,6 +40,12 @@ const postSchema = new Schema({
            ref: 'Comment' 
         }
     ],
+    bookmark: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Post'
+        }
+    ]
 
 },{
     timestamps: true

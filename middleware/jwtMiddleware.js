@@ -6,8 +6,6 @@ exports.verifyToken = (req,res, next) =>{
         req.tokan = tokan
         next()
     }else{
-        res.json({
-            error: 'Token is not valid'
-        })
+        res.json({ error: 'Token is not valid'})
     }
 }

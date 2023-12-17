@@ -5,8 +5,9 @@ const validationErrorFormatter = require("../utils/validationErrorFormatter");
 const Profile = require('../model/Profile');
 
 //Get All Post
-module.exports.getAllPostController = (req, res) =>{
-    res.json('success')
+module.exports.getAllPostController = async(req, res) =>{
+    const post = await Post.find()
+    res.json(post)
 }
 
 //Get One User Post
@@ -22,7 +23,7 @@ module.exports.getUserPostController = (req, res) =>{
         }
 })
 }
-//Get Single Post with id
+//Get user Single Post with id
 module.exports.getUserOnePostController = (req, res) =>{
     const {id} = req.params;
 
@@ -36,6 +37,32 @@ module.exports.getUserOnePostController = (req, res) =>{
 
         }
 })
+}
+//Get Single Post with id no jwt need
+module.exports.getOnePostController = async(req, res) =>{
+    const {id} = req.params;
+    const posts = await Post.findOne({ _id: id }).populate({
+        path: 'author',
+        select: 'name image'
+    })
+    .populate([{
+        path: 'comments',
+        populate:{
+            path: 'user',
+            select: 'name image',
+        }
+    }
+])
+    .populate([{
+        path: 'comments',
+        populate: {
+            path: 'reply.user',
+            select: 'name image'
+        } 
+    }
+])
+    console.log(posts);
+    res.json(posts) 
 }
 //Edit Single Post with id
 module.exports.putSingleUserPostController = (req, res) =>{
@@ -109,7 +136,7 @@ module.exports.postSinglePost = (req, res) =>{
                 body,
                 author: decoded._id,
                 thumbnail,
-                tags
+                tags: tags.split(',')
             })
             let createPost = await PostModel.save();
             await Profile.findOneAndUpdate(
