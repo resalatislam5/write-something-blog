@@ -25,6 +25,7 @@ exports.signupPostController = async (req, res, next) => {
                _id: createUser._id,
                name,
                email,
+               image: createUser.image
            }
            const profile = new Profile({
                user: createUser._id
@@ -55,11 +56,12 @@ exports.loginPostController = async(req, res, next) =>{
         if(!match){
             return res.json({ "message": "Invaild Credential" })
         }
-        const { name,  _id} = userFind
+        const { name,  _id, image} = userFind
         const user = {
             _id,
             name,
-            email
+            email,
+            image
         }
         jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '30d' }, (err, tokan) => {
             console.log(tokan);
@@ -72,7 +74,4 @@ exports.loginPostController = async(req, res, next) =>{
         console.log(e);
         next()
     }
-}
-exports.logoutController = (req, res, next) =>{
-
 }

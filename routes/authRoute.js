@@ -8,5 +8,3 @@ exports.authRoute = router
     .post('/signup', signUpValidator, signupPostController)
 
     .post('/login', loginPostController)
-
-    .get('/logout', logoutController)

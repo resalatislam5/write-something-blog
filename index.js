@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const morgan = require('morgan');
-const cors = require('cors');
+const cors = require('cors'); 
 const cookieParser = require('cookie-parser');
 
 // Imports Routes 
@@ -12,6 +12,7 @@ const {authRoute: authRoutes} = require('./routes/authRoute');
 const { dashboardRoute } = require('./routes/dashboardRoute');
 const { postRoute } = require('./routes/postRoutes');
 const { HomeFetch } = require('./routes/homeFetch');
+const { searchRoute } = require('./routes/searchRoute');
 
 
 //mongodb uri
@@ -32,6 +33,7 @@ app.use('/auth', authRoutes)
 app.use('/dashboard', dashboardRoute)
 app.use('/post', postRoute)
 app.use('/home', HomeFetch)
+app.use('/search', searchRoute)
 
 app.get('/', (req, res) =>{
     res.send('Server is Running')
